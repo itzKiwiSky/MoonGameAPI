@@ -60,7 +60,7 @@ function save.returnChunk(savefile, chunkID)
     --save exceptions
 
     if not returnSaveIntegrity(savefile) then
-        print("[MoonEngine] - {API.mgx.save} :: Save file is not valid - (inavlidHeader)")
+        print("[MoonEngine] - {API.mgx.save} :: Save file is not valid - (invalidHeader)")
         os.exit(0)
     end
     if returnSaveIntegrity() == 'null header' then
