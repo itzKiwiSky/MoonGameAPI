@@ -3,15 +3,12 @@ local folder = require 'API.generics.filesystem.file'
 
 save = {}
 
-saveValue = {}
-saveChunk = {}
 
 
 function save.create(gameName)
     if gameName ~= nil or gameName ~= " " then
         os.execute("@echo off")
         os.execute('@echo.>"%cd%/' .. gameName .. ".save")
-        return gameName
     else
         print("[MoonEngine] - {API.mgx.save} :: Save name can not be 'Nil'")
         os.exit(0)
@@ -32,40 +29,65 @@ function save.write(savefile, chunkname, value)
     end
 end
 
-function save.remove(savefile)
+function save.erase(savefile)
     saveFile = io.open(savefile .. ".save", "r")
     if not saveFile then
         print("[MoonEngine] - {API.mgx.save} :: Save file don't exist")
         os.exit(0)
     else
         os.execute("type nul > %cd%/" .. savefile .. ".save")
+        save.write(savefile)
     end
 end
 
-function save.load(savefile)
+
+function save.returnChunk(savefile, chunkID)
+    local i = 0
     local file = io.open(savefile .. ".save")
-    checkSaveIntegrity(file)
+
     if file then
         for line in file:lines() do
-            local value, savechunk = unpack(line:split(":"))
-            table.insert(saveValue, line, value)
-            table.insert(saveChunk, line, savechunk)
+            i = i + 1
+            if i == chunkID then
+                return line
+            end
         end
     else
-        print("[MoonEngine] - {API.mgx.save} :: file cannot be loaded")
+        print("[MoonEngine] - {API.mgx.save} :: Save file don't exist")
+        os.exit(0)       
+    end
+
+    --save exceptions
+
+    if not returnSaveIntegrity(savefile) then
+        print("[MoonEngine] - {API.mgx.save} :: Save file is not valid - (inavlidHeader)")
         os.exit(0)
+    end
+    if returnSaveIntegrity() == 'null header' then
+        print("[MoonEngine] - {API.mgx.save} :: Save file is not valid - (nullHeader)")
+        os.exit(0) 
     end
 end
 
-function checkSaveIntegrity(savefile)
-    if saveValue[0] == 'saveStart' then
-        if saveChunk[0] == 'head' then
-        else
-            print("[MoonEngine] - {API.mgx.save} :: Save file is not valid (invalidSaveChunk)")
-        end
+function returnSaveIntegrity(savefile)
+    chunk =  save.returnChunk(savefile, 1)
+    if chunk == nil then
+        return 'null header'
     else
-        print("[MoonEngine] - {API.mgx.save} :: Save file is not valid (invalidValue)")
-        os.exit(0)
+        if chunk ~= 'saveStart:head' then
+            return false
+        else
+            return true
+        end
+    end
+end
+
+function save.exist(savefile)
+    file = io.open(savefile .. ".save")
+    if file == nil then
+        return false
+    else
+        return true
     end
 end
 
