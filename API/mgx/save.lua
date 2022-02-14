@@ -57,8 +57,6 @@ function save.returnChunk(savefile, chunkID)
         os.exit(0)       
     end
 
-    --save exceptions
-
     if not returnSaveIntegrity(savefile) then
         print("[MoonEngine] - {API.mgx.save} :: Save file is not valid - (invalidHeader)")
         os.exit(0)
