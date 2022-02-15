@@ -15,16 +15,16 @@ function save.create(gameName)
     end
 end
 
-function save.write(savefile, chunkname, value)
+function save.write(savefile, chunkid, value)
     saveFile = io.open(savefile .. ".save", "r")
     if not saveFile then
         print("[MoonEngine] - {API.mgx.save} :: Save file don't exist")
         os.exit(0)
     else
-        if chunkname == nil or value == nil then
+        if chunkid == nil or value == nil then
             os.execute("@echo " .. "saveStart:head" .. '>"%cd%/"' .. savefile .. ".save")
         else
-            os.execute("@echo " .. chunkname .. ":" .. value .. '>"%cd%/"' .. savefile .. ".save")
+            os.execute("@echo " .. value .. '>"%cd%/"' .. savefile .. ".save")
         end
     end
 end
