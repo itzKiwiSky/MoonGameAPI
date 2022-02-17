@@ -1,5 +1,6 @@
 local folder = require 'API.generics.filesystem.file'
-
+local stringx = require 'pl.stringx'
+local tablex = require 'pl.tablex'
 
 save = {}
 
@@ -8,23 +9,25 @@ save = {}
 function save.create(gameName)
     if gameName ~= nil or gameName ~= " " then
         os.execute("@echo off")
-        os.execute('@echo.>"%cd%/' .. gameName .. ".save")
+        os.execute("powershell new-item " .. gameName .. ".save")
     else
         print("[MoonEngine] - {API.mgx.save} :: Save name can not be 'Nil'")
         os.exit(0)
     end
 end
 
-function save.write(savefile, chunkid, value)
+function save.write(savefile, chunkname, value)
     saveFile = io.open(savefile .. ".save", "r")
     if not saveFile then
         print("[MoonEngine] - {API.mgx.save} :: Save file don't exist")
         os.exit(0)
     else
         if chunkid == nil or value == nil then
-            os.execute("@echo " .. "saveStart:head" .. '>"%cd%/"' .. savefile .. ".save")
+            chunkname = "start"
+            value = "head"
+            os.execute("powershell add-content" .. saveFile .. " start:head" )
         else
-            os.execute("@echo " .. value .. '>"%cd%/"' .. savefile .. ".save")
+            os.execute("powershell add-content" .. saveFile .. " " .. chunkname .. ":" .. value)
         end
     end
 end
@@ -57,22 +60,39 @@ function save.returnChunk(savefile, chunkID)
         os.exit(0)       
     end
 
-    if not returnSaveIntegrity(savefile) then
+    if not returnSaveIntegrity(savefile, 1) then
         print("[MoonEngine] - {API.mgx.save} :: Save file is not valid - (invalidHeader)")
         os.exit(0)
     end
-    if returnSaveIntegrity() == 'null header' then
+    if returnSaveIntegrity(savefile, 1) == 'null header' then
         print("[MoonEngine] - {API.mgx.save} :: Save file is not valid - (nullHeader)")
         os.exit(0) 
     end
 end
 
-function returnSaveIntegrity(savefile)
-    chunk =  save.returnChunk(savefile, 1)
-    if chunk == nil then
+function returnSaveIntegrity(savefile, chunkID)
+    chunkTokenizer = {}
+    saveChunk = nil
+    file = io.open(savefile .. ".save")
+    for line in file:lines() do
+        i = i + 1
+        if i == chunkID then
+            saveChunk = line
+            return line
+        end
+    end
+    chunkTokenizer = stringx.split(line, ":")
+
+    if chunkTokenizer[1] == nil then
         return 'null header'
+    end
+    if chunkTokenizer[2] == nil then
+        return 'null header'
+    end
+    if chunkTokenizer[1] ~= "start" then
+        return false
     else
-        if chunk ~= 'saveStart:head' then
+        if chunkTokenizer[2] ~= 'head' then
             return false
         else
             return true
