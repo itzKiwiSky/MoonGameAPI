@@ -10,5 +10,5 @@ This API is currently in development
   - Scene manager
   - Utils
   - Window Management (Change Size, title, color)
-  - Filesystem (included)
+  - gui system
   - Progress Loading generator (Got from old lib ProgressUtils) - https://github.com/Doge2Dev/ProgressUtilities-Lua
