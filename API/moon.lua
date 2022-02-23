@@ -6,7 +6,7 @@ version = [[
 ====================================
     Moon Terminal game API
 
-            BETA [v1.0.1]
+            [v1.0.1]
 
     Created by ChocolateLoxtl_
 ====================================

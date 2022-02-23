@@ -20,21 +20,22 @@ end
 function save.write(packageName, chunk, value)
      assert(exist(packageName), "[MoonGame] - {API.mgx.save} :: The Save file don't exist, create one using save.create()")
      assert(chunk ~= nil or value ~= nil, "[MoonGame] - {API.mgx.save} :: Chunk or Value can't be nil")
-     os.execute("powershell add-content %cd%/" .. packageName .. ".save" .. ' ' .. chunk .. ":" .. value)
+     os.execute("@echo " .. chunk .. ":" .. value .. ">>" .. packageName .. ".save")
 end
 
---[[
+
 function save.read(packageName, chunkName)
-     file = io.open(packageName, ".save", "rb")
-     local i = 0
-     local saveToken = {}
-     for i in file.lines() do
-          if stringx.lfind(i, chunkName) then
-               
+     i = 0
+     file = io.open(packageName .. ".save", "r")
+     lines = file:lines()
+     for line in lines do
+          i = i + 1                --debug stuff
+          if string.find(line, chunkName) then
+               outStr = stringx.split(line, ":")
+               return outStr[2]
           end
      end
 end
-]]--
 
 
 function exist(package)
