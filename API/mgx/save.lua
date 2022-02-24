@@ -23,7 +23,6 @@ function save.write(packageName, chunk, value)
      os.execute("@echo " .. chunk .. ":" .. value .. ">>" .. packageName .. ".save")
 end
 
-
 function save.read(packageName, chunkName)
      i = 0
      file = io.open(packageName .. ".save", "r")
@@ -35,6 +34,11 @@ function save.read(packageName, chunkName)
                return outStr[2]
           end
      end
+end
+
+function save.erase(packageName)
+     file = io.open(packageName .. ".save")
+     os.execute("break>" .. packageName .. ".save")
 end
 
 
