@@ -1,14 +1,16 @@
-# MoonGameAPI
-Lua API to make terminal based games (current in development)
+# MoonGame API
+MoonGame is a toolkit to create simples games using **windows** command terminal.
+It uses hybrid command shells, use Default Command Terminal **(CMD)** and **Windows Powershell**.
 
-## MoonGame
-Is a lua based API to make games using windows terminal (Shell)
-This API is currently in development
 
-# Features
-  - Create Save (Create, write and remove)
-  - Scene manager
-  - Utils
-  - Window Management (Change Size, title, color)
-  - gui system
-  - Progress Loading generator (Got from old lib ProgressUtils) - https://github.com/Doge2Dev/ProgressUtilities-Lua
+
+# Window Tool
+
+Tool | Usage | description
+|--|----|--|
+| Window | window.size(width, height) | Change window size
+| Window | window.title(string) | Change window title, if nil come with default title
+| Screen | screen.color(color1, color2) | Change screen color
+| Screen | screen.clear() | Clear screen
+| GuiParser | gui.render(filename) | Draw from file
+
