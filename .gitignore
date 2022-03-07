@@ -2,3 +2,5 @@ game
 test.lua
 *.save
 *_test.lua
+*.ore
+test*

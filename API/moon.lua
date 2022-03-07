@@ -1,4 +1,4 @@
-local powerprint = require 'API.generics.write'
+stringx = require 'pl.stringx'
 
 moon = {}
 
@@ -16,11 +16,17 @@ function moon.version()
     print(version)
 end
 
-
--- return function print with color system [MoonGame] - {API.window.writeColor}
-
-function moon.write(text, color1, color2)
-    powerprint.write(text, color1, color2)
+function moon.gameInfo(info)
+    file = io.open("game.ore")
+    lines = file:lines()
+    outInfo = {}
+    for line in lines do
+        i = i + 1
+        if string.find(line, info) then
+            outInfo = stringx.split(line, "::")
+            return outInfo[2]
+        end
+    end
 end
 
 return moon

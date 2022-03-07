@@ -23,8 +23,9 @@ function save.write(packageName, chunk, value)
      os.execute("@echo " .. chunk .. ":" .. value .. ">>" .. packageName .. ".save")
 end
 
-function save.read(packageName, chunkName)
+function save.read(chunkName)
      i = 0
+     packageName = moon.gameInfo("package")
      file = io.open(packageName .. ".save", "r")
      lines = file:lines()
      for line in lines do
@@ -38,7 +39,7 @@ end
 
 function save.erase(packageName)
      file = io.open(packageName .. ".save")
-     os.execute("break>" .. packageName .. ".save")
+     assert(file, "[MoonGame] - {API.mgx.save} :: File not exist")
 end
 
 
@@ -48,7 +49,7 @@ function exist(package)
      if file == nil then
           return false
      else
-          return true
+          return true    
      end
 end
 
