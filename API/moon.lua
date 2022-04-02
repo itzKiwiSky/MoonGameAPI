@@ -17,15 +17,20 @@ function moon.version()
 end
 
 function moon.gameInfo(info)
-    file = io.open("game.ore")
-    lines = file:lines()
-    outInfo = {}
-    for line in lines do
-        i = i + 1
-        if string.find(line, info) then
-            outInfo = stringx.split(line, "::")
-            return outInfo[2]
+    if info == nil then
+        file = io.open("game.ore")
+        lines = file:lines()
+        outInfo = {}
+        for line in lines do
+            i = i + 1
+            if string.find(line, info) then
+                outInfo = stringx.split(line, "::")
+                return outInfo[2]
+            end
         end
+    else
+        print("[MoonGame] - {API.moongame} :: Can't read game info file")
+        os.exit(0)
     end
 end
 
